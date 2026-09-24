@@ -3,18 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WDP Frontend</title>
+  <title>WDP | Chọn kho vừa vặn</title>
+  <style>
+    :root{--ink:#17302b;--muted:#6b7e79;--line:#dbe6e1;--paper:#f7faf8;--mint:#dff3e9;--green:#176b52;--orange:#ef865e;--white:#fff}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+    header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:auto;padding:22px 24px}
+    .brand{font-weight:800;letter-spacing:-.03em;font-size:22px}.brand span{color:var(--orange)}
+    nav{display:flex;gap:24px;color:var(--muted);font-size:14px}nav a{color:inherit;text-decoration:none}
+    .account{border:1px solid var(--line);background:var(--white);padding:9px 14px;border-radius:8px;font-weight:700;color:var(--ink)}
+    .hero{max-width:1180px;margin:20px auto 0;padding:42px 24px 24px;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+    h1{font-size:clamp(38px,5vw,64px);line-height:1.02;letter-spacing:-.06em;margin:0 0 18px;max-width:650px}
+    .hero p{color:var(--muted);font-size:17px;max-width:520px;margin:0 0 26px}
+    .hero-art{min-height:270px;border-radius:14px;background:#d7eee2;position:relative;overflow:hidden;padding:28px}
+    .room{height:100%;min-height:214px;border:3px solid #74aa8d;border-bottom-width:8px;background:linear-gradient(145deg,#edf8f1 0 55%,#c8e4d4 56%);position:relative}
+    .room:before{content:"";position:absolute;left:20%;top:17%;width:42%;height:35%;background:#f39b73;border:6px solid #fff;border-radius:5px;box-shadow:35px 45px 0 -9px #6d9a83}
+    .room:after{content:"";position:absolute;right:10%;bottom:12%;width:27%;height:25%;background:#fff6dc;border:6px solid #dfb16b;border-radius:4px}
+    .hero-badge{position:absolute;right:24px;top:24px;background:var(--white);padding:10px 13px;border-radius:8px;box-shadow:0 10px 25px #2058441c;font-weight:700}
+    .cta{display:flex;gap:10px;align-items:center}.button{border:0;border-radius:8px;padding:12px 17px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.button.secondary{background:var(--white);color:var(--ink);border:1px solid var(--line)}
+    .section{max-width:1180px;margin:24px auto;padding:0 24px 48px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:12px 0 20px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800;color:var(--orange)}h2{font-size:30px;letter-spacing:-.04em;margin:3px 0}
+    .tools{display:flex;gap:8px;align-items:center}.select{border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:8px;color:var(--ink)}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative}.card.selected{outline:2px solid var(--orange)}
+    .visual{height:145px;padding:18px;background:#eef6f0;position:relative}.unit{height:100%;border:3px solid #86b99c;border-bottom-width:7px;background:#d8eee0;position:relative}.unit:before{content:"";position:absolute;left:12%;bottom:15%;width:28%;height:34%;background:#efa071;border-radius:3px;box-shadow:40px -6px 0 -5px #7d9a84,85px 7px 0 -9px #e2bd75}.tag{position:absolute;top:12px;left:12px;background:#fff;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:800}.body{padding:16px}.body h3{margin:0;font-size:19px}.meta{color:var(--muted);font-size:13px;margin:3px 0 12px}.fit{min-height:43px;color:var(--ink);font-size:13px}.price{font-weight:800;font-size:19px;margin:14px 0}.price small{font-size:12px;color:var(--muted);font-weight:500}.actions{display:flex;gap:8px}.actions button{flex:1;padding:9px 7px;font-size:12px}.compare{position:absolute;right:12px;top:12px;accent-color:var(--orange)}
+    .compare-bar{display:none;margin-top:18px;background:var(--ink);color:#fff;padding:15px 18px;border-radius:8px;align-items:center;justify-content:space-between;gap:15px}.compare-bar.show{display:flex}.compare-bar button{background:var(--orange);color:#fff;border:0;border-radius:6px;padding:9px 12px;font-weight:800}
+    .steps{border-top:1px solid var(--line);padding-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.step strong{display:block;font-size:17px;margin:7px 0}.step p{color:var(--muted);margin:0;font-size:13px}
+    dialog{border:0;border-radius:12px;padding:0;max-width:430px;width:calc(100% - 32px);box-shadow:0 20px 70px #17302b40}dialog::backdrop{background:#17302b66}.modal{padding:24px}.modal h2{margin-top:0}.modal input{width:100%;border:1px solid var(--line);padding:11px;border-radius:7px;margin:5px 0 12px}.modal-actions{display:flex;justify-content:flex-end;gap:8px}
+    @media(max-width:800px){nav{display:none}.hero{grid-template-columns:1fr;padding-top:20px}.grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.tools{width:100%}.select{flex:1}}
+    @media(max-width:500px){.grid{grid-template-columns:1fr}.hero-art{min-height:220px}.hero{padding-left:16px;padding-right:16px}.section{padding-left:16px;padding-right:16px}header{padding:18px 16px}}
+  </style>
 </head>
 <body>
+  <header><div class="brand">wdp<span>.</span></div><nav><a href="#units">Chọn kho</a><a href="#how">Cách thuê</a><a href="#help">Tư vấn kích thước</a></nav><button class="account">Khu vực khách hàng</button></header>
   <main>
-    <h1>Frontend đã sẵn sàng</h1>
-    <p id="status">Đang kiểm tra backend...</p>
+    <section class="hero"><div><div class="eyebrow">Kho tự quản, vừa vặn với bạn</div><h1>Thêm chỗ cho những điều quan trọng.</h1><p>Chọn một không gian sạch, an toàn để cất đồ theo cách dễ hiểu hơn. Xem kho bằng những vật dụng quen thuộc, rồi giữ chỗ chỉ trong vài phút.</p><div class="cta"><a class="button" href="#units">Xem các cỡ kho</a><a class="button secondary" href="#how">Cách hoạt động →</a></div></div><div class="hero-art"><div class="hero-badge">Ra vào linh hoạt · An tâm mỗi ngày</div><div class="room"></div></div></section>
+    <section class="section" id="units"><div class="section-head"><div><div class="eyebrow">Kích thước kho</div><h2>Chọn đúng không gian</h2></div><div class="tools"><select class="select" id="filter"><option value="all">Tất cả nhu cầu</option><option value="small">Đồ cá nhân</option><option value="medium">Căn hộ nhỏ</option><option value="large">Chuyển nhà / kinh doanh</option></select></div></div>
+      <div class="grid" id="grid"></div><div class="compare-bar" id="compareBar"><span><b id="compareCount">0</b> kho đang được chọn để so sánh</span><button id="compareBtn">So sánh ngay</button></div>
+    </section>
+    <section class="section" id="how"><div class="eyebrow">Thuê kho đơn giản</div><h2>Từ “giữ chỗ” đến ngày chuyển đồ</h2><div class="steps"><div class="step"><div>01</div><strong>Chọn kích thước</strong><p>Ước lượng bằng số phòng và đồ vật quen thuộc, sau đó so sánh các lựa chọn.</p></div><div class="step"><div>02</div><strong>Giữ chỗ miễn phí</strong><p>Giữ đúng kho bạn thích. Chưa phát sinh tiền thuê ở bước này.</p></div><div class="step"><div>03</div><strong>Hoàn tất thuê</strong><p>Xác nhận thông tin, thanh toán và nhận hướng dẫn truy cập kho.</p></div></div></section>
   </main>
+  <dialog id="booking"><form method="dialog" class="modal"><div class="eyebrow">Giữ chỗ</div><h2 id="bookingTitle">Kho Mini</h2><p>Để lại thông tin, đội ngũ WDP sẽ liên hệ xác nhận.</p><label>Họ và tên<input required placeholder="Nguyễn Văn A"></label><label>Số điện thoại<input required type="tel" placeholder="090..."></label><div class="modal-actions"><button class="button secondary">Để sau</button><button class="button" value="confirm">Gửi yêu cầu</button></div></form></dialog>
   <script>
-    fetch("http://localhost:3000/api/health")
-      .then((response) => response.json())
-      .then((data) => { document.querySelector("#status").textContent = data.message; })
-      .catch(() => { document.querySelector("#status").textContent = "Backend chưa chạy."; });
+    const units=[
+      {id:"locker",name:"Tủ cá nhân",size:"1–2 m³",price:"từ 299.000đ",fit:"Vali, thùng đồ, hồ sơ, đồ theo mùa",type:"small",label:"Gọn nhẹ"},
+      {id:"small",name:"Kho nhỏ",size:"3–5 m³",price:"từ 599.000đ",fit:"Nội thất phòng ngủ, 15–25 thùng đồ",type:"small",label:"Phổ biến"},
+      {id:"medium",name:"Kho vừa",size:"6–10 m³",price:"từ 999.000đ",fit:"Căn hộ studio, sofa, tủ lạnh, xe máy",type:"medium",label:"Cân bằng"},
+      {id:"large",name:"Kho lớn",size:"11–23 m³",price:"từ 1.699.000đ",fit:"Đồ của căn hộ, văn phòng nhỏ, hàng hóa",type:"large",label:"Nhiều không gian"}
+    ];
+    const chosen=new Set(), grid=document.querySelector("#grid"), filter=document.querySelector("#filter");
+    function render(){grid.innerHTML=units.filter(u=>filter.value==="all"||u.type===filter.value).map(u=>`<article class="card ${chosen.has(u.id)?"selected":""}"><div class="visual"><span class="tag">${u.label}</span><input class="compare" type="checkbox" ${chosen.has(u.id)?"checked":""} aria-label="So sánh ${u.name}" data-id="${u.id}"><div class="unit"></div></div><div class="body"><h3>${u.name}</h3><div class="meta">${u.size} · Kho riêng có khóa</div><div class="fit"><b>Phù hợp với:</b><br>${u.fit}</div><div class="price">${u.price} <small>/ tháng</small></div><div class="actions"><button class="button" data-book="${u.id}">Giữ chỗ</button><button class="button secondary" data-book="${u.id}">Chi tiết</button></div></div></article>`).join("");document.querySelectorAll(".compare").forEach(el=>el.onchange=()=>{el.checked?chosen.add(el.dataset.id):chosen.delete(el.dataset.id);render()});document.querySelectorAll("[data-book]").forEach(el=>el.onclick=()=>{document.querySelector("#bookingTitle").textContent=units.find(u=>u.id===el.dataset.book).name;document.querySelector("#booking").showModal()});document.querySelector("#compareBar").classList.toggle("show",chosen.size>0);document.querySelector("#compareCount").textContent=chosen.size}
+    filter.onchange=render;document.querySelector("#compareBtn").onclick=()=>alert([...chosen].map(id=>units.find(u=>u.id===id).name+" · "+units.find(u=>u.id===id).size).join("\n")||"Hãy chọn ít nhất một kho.");render();
   </script>
 </body>
 </html>

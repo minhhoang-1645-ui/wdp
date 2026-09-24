@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WDP Frontend</title>
+</head>
+<body>
+  <main>
+    <h1>Frontend đã sẵn sàng</h1>
+    <p id="status">Đang kiểm tra backend...</p>
+  </main>
+  <script>
+    fetch("http://localhost:3000/api/health")
+      .then((response) => response.json())
+      .then((data) => { document.querySelector("#status").textContent = data.message; })
+      .catch(() => { document.querySelector("#status").textContent = "Backend chưa chạy."; });
+  </script>
+</body>
+</html>
